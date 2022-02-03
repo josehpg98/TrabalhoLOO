@@ -1,0 +1,12 @@
+#surefire
+#Tue Jan 25 15:21:27 BRST 2022
+jpda.address=63572
+maven.ext.class.path=C\:\\Program Files\\NetBeans 8.2\\java\\maven-nblib\\netbeans-eventspy.jar
+file.encoding=UTF-8
+jpda.listen=true
+forkMode=once
+user.dir=C\:\\Users\\Jos\u00E9 Henrique PG\\Documents\\NetBeansProjects\\ProjetoClinicaVeterinaria
+localRepository=C\:\\Users\\Jos\u00E9 Henrique PG\\.m2\\repository
+test=br.edu.ifsul.lpoo.cv.test.TestePerssistenciaJPA
+basedir=C\:\\Users\\Jos\u00E9 Henrique PG\\Documents\\NetBeansProjects\\ProjetoClinicaVeterinaria
+maven.surefire.debug=-Xdebug -Xrunjdwp\:transport\=dt_socket,server\=n,address\=63572
