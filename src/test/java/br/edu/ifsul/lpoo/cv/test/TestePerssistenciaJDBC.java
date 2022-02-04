@@ -52,7 +52,6 @@ public class TestePerssistenciaJDBC {
             if(cons == null){
                 JOptionPane.showMessageDialog(null,"Não encontrou nenhuma consulta!");
                 cons = new Consulta();
-                
             }
         }
     }
