@@ -5,8 +5,10 @@
  */
 package br.edu.ifsul.lpoo.cv.test;
 
+import br.edu.ifsul.cc.lpoo.cv.model.Consulta;
 import br.edu.ifsul.cc.lpoo.cv.model.Especie;
 import br.edu.ifsul.cc.lpoo.cv.model.dao.PerssistenciaJDBC;
+import javax.swing.JOptionPane;
 import org.junit.Test;
 
 /**
@@ -41,6 +43,17 @@ public class TestePerssistenciaJDBC {
              perssist_especie.fecharConexao();
         }else{
              System.out.println("Não abriu conexao via JDBC");
+        }
+    }
+    public void testeListaConsulta()throws Exception{
+        PerssistenciaJDBC perssist_consulta = new PerssistenciaJDBC();
+        if(perssist_consulta.conexaoAberta()){
+            Consulta cons  = (Consulta) perssist_consulta.find(Consulta.class, 8);
+            if(cons == null){
+                JOptionPane.showMessageDialog(null,"Não encontrou nenhuma consulta!");
+                cons = new Consulta();
+                
+            }
         }
     }
 }
