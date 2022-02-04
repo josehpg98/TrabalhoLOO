@@ -22,8 +22,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -302,7 +304,7 @@ public class PerssistenciaJDBC implements InterfacePerssistencia {
                 ps.setString(1, pes.getCpf());
                 ps.setString(2, pes.getCep());
                 ps.setString(3, pes.getComplemento());
-                Date dtU = new Date(System.currentTimeMillis());
+                Date dtU = new Date(System.currentTimeMillis());///converte a data em millesemos de segundo
                 dtU.setTime(pes.getData_nascimento().getTimeInMillis());
                 ps.setDate(4, (java.sql.Date) dtU);
                 ps.setString(5, pes.getEmail());
@@ -365,7 +367,7 @@ public class PerssistenciaJDBC implements InterfacePerssistencia {
         if (o instanceof Especie) {
             Especie esp = (Especie) o;//conversao
             PreparedStatement ps = this.con.prepareStatement("delete from tb_especie where id = ? ");
-            ps.setInt(1, esp.getId());
+            ps.setInt(1, esp.getId());///especifica o tipo de parametro do ps
             ps.execute();
         } else if (o instanceof Consulta) {
             Consulta cons = (Consulta) o;
@@ -412,7 +414,7 @@ public class PerssistenciaJDBC implements InterfacePerssistencia {
             PreparedStatement ps = this.con.prepareStatement("delete from tb_fornecedor where cnpj = ?");
             ps.setString(1, forn.getCnpj());
             ps.execute();
-        }else if(o instanceof Funcionario){
+        } else if (o instanceof Funcionario) {
             Funcionario func = (Funcionario) o;
             PreparedStatement ps = this.con.prepareStatement("delete from tb_funcionario where cpf = ?");
             ps.setString(1, func.getCpf());
