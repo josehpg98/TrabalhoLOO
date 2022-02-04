@@ -5,9 +5,11 @@
  */
 package br.edu.ifsul.cc.lpoo.cv.model.dao;
 
+import br.edu.ifsul.cc.lpoo.cv.model.Agenda;
 import br.edu.ifsul.cc.lpoo.cv.model.Cliente;
 import br.edu.ifsul.cc.lpoo.cv.model.Consulta;
 import br.edu.ifsul.cc.lpoo.cv.model.Especie;
+import br.edu.ifsul.cc.lpoo.cv.model.Fornecedor;
 import br.edu.ifsul.cc.lpoo.cv.model.Funcionario;
 import br.edu.ifsul.cc.lpoo.cv.model.Medico;
 import br.edu.ifsul.cc.lpoo.cv.model.Pessoa;
@@ -53,7 +55,7 @@ public class PerssistenciaJDBC implements InterfacePerssistencia {
                 return !con.isClosed();//verifica se a conexao está aberta
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            ///ex.printStackTrace();
         }
         return false;
     }
@@ -64,7 +66,7 @@ public class PerssistenciaJDBC implements InterfacePerssistencia {
             this.con.close();//fecha a conexao.
             System.out.println("Fechou conexao via JDBC!");
         } catch (SQLException e) {
-            e.printStackTrace();//gera uma pilha de erro na saida.
+            ///e.printStackTrace();//gera uma pilha de erro na saida.
         }
     }
 
@@ -251,9 +253,9 @@ public class PerssistenciaJDBC implements InterfacePerssistencia {
                 ps.executeUpdate();
             } else {///update
                 PreparedStatement ps = this.con.prepareStatement("update tb_pet set data_nascimento = ?, nome = ?, observacao = ?, cliente_id = ?, raca_id = ? here id = ?");
-                Date dtU = null;
-                dtU.setTime(pt.getData_nascimento().getTimeInMillis());
-                ps.setDate(1, (java.sql.Date) dtU);
+                ///Date dtU = null;
+                ///dtU.setTime(pt.getData_nascimento().getTimeInMillis());
+                ///ps.setDate(1, (java.sql.Date) dtU);
                 ps.setString(2, pt.getNome());
                 ps.setString(3, pt.getObservacao());
                 ps.setString(4, pt.getCliente().getCpf());
@@ -399,6 +401,21 @@ public class PerssistenciaJDBC implements InterfacePerssistencia {
             Venda vd = (Venda) o;
             PreparedStatement ps = this.con.prepareStatement("delete from tb_venda where id = ?");
             ps.setInt(1, vd.getId());
+            ps.execute();
+        } else if (o instanceof Agenda) {
+            Agenda ag = (Agenda) o;
+            PreparedStatement ps = this.con.prepareStatement("delete from tb_agenda where id = ?");
+            ps.setInt(1, ag.getId());
+            ps.execute();
+        } else if (o instanceof Fornecedor) {
+            Fornecedor forn = (Fornecedor) o;
+            PreparedStatement ps = this.con.prepareStatement("delete from tb_fornecedor where cnpj = ?");
+            ps.setString(1, forn.getCnpj());
+            ps.execute();
+        }else if(o instanceof Funcionario){
+            Funcionario func = (Funcionario) o;
+            PreparedStatement ps = this.con.prepareStatement("delete from tb_funcionario where cpf = ?");
+            ps.setString(1, func.getCpf());
             ps.execute();
         }
     }
