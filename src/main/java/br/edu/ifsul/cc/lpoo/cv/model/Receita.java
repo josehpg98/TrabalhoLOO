@@ -34,7 +34,7 @@ public class Receita implements Serializable {
     @GeneratedValue(generator = "seq_receita", strategy = GenerationType.SEQUENCE)
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 150)
     private String orientacao;
 
      @ManyToMany
