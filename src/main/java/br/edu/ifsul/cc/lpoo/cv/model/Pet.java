@@ -32,14 +32,14 @@ public class Pet implements Serializable{
     @GeneratedValue(generator = "seq_pet", strategy = GenerationType.SEQUENCE)
     private Integer id;
       
-    @Column(nullable = false)
+    @Column(nullable = false, length = 80)
     private String nome;
     
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar data_nascimento;
     
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String observacao;
     
     @ManyToOne///referência de cliente em uma agregação por composição
