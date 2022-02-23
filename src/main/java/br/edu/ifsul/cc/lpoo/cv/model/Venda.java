@@ -37,10 +37,10 @@ public class Venda implements Serializable {
     @GeneratedValue(generator = "seq_venda", strategy = GenerationType.SEQUENCE)
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String observacao;
 
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 2)
     private Float valortotal;
 
     @Column(nullable = false)
