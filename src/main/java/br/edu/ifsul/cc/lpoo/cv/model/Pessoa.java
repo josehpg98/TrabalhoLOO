@@ -28,41 +28,48 @@ import javax.persistence.TemporalType;
 @Table(name = "tb_pessoa")
 @Inheritance(strategy = InheritanceType.JOINED)//alterar a estrategia para JOINED
 @DiscriminatorColumn(name = "tipo")
-public class Pessoa implements Serializable{
+public class Pessoa implements Serializable {
 
     ///Atributos
     @Id
-    @SequenceGenerator(name = "seq_pessoa", sequenceName = "seq_pessoa_id", allocationSize = 1)
-    @GeneratedValue(generator = "seq_pessoa", strategy = GenerationType.SEQUENCE)  
+    @SequenceGenerator(name = "seq_pessoa", sequenceName = "seq_pessoa_cpf", allocationSize = 1)
+    @GeneratedValue(generator = "seq_pessoa", strategy = GenerationType.SEQUENCE)
     private String cpf;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
     private String rg;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 80)
     private String nome;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
     private String senha;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 14)
     private String numero_celular;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 80)
     private String email;
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar data_nascimento;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 8)
     private String cep;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String endereco;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 80)
     private String complemento;
+
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar data_cadastro;
+    
+    @Column(nullable = false)
+    private String tipo;
 
     ///Construtor
     public Pessoa() {
@@ -210,4 +217,25 @@ public class Pessoa implements Serializable{
         this.complemento = complemento;
     }
 
+    /**
+     * @return the data_cadastro
+     */
+    public Calendar getData_cadastro() {
+        return data_cadastro;
+    }
+
+    /**
+     * @param data_cadastro the data_cadastro to set
+     */
+    public void setData_cadastro(Calendar data_cadastro) {
+        this.data_cadastro = data_cadastro;
+    }
+
+      public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 }
