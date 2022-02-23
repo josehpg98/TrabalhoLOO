@@ -43,7 +43,7 @@ public class Agenda implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar data_fim;
     
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String observacao;
     
     @Column(nullable = false)
