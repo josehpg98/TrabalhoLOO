@@ -32,13 +32,13 @@ public class Produto implements Serializable {
     @GeneratedValue(generator = "seq_produto", strategy = GenerationType.SEQUENCE)
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 80)
     private String nome;
 
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 2)
     private Float valor;
 
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 2)
     private Float quantidade;
 
     @Column(nullable = false)
