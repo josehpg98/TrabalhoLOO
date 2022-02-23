@@ -19,10 +19,10 @@ import javax.persistence.Table;
 @DiscriminatorValue("O")
 public class Fornecedor extends Pessoa{
     ///Atributos
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String cnpj;
     
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String ie;
     ///Construtor
     public Fornecedor(){
