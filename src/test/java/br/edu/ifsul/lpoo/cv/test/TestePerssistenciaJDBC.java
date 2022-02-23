@@ -7,7 +7,10 @@ package br.edu.ifsul.lpoo.cv.test;
 
 import br.edu.ifsul.cc.lpoo.cv.model.Consulta;
 import br.edu.ifsul.cc.lpoo.cv.model.Especie;
+import br.edu.ifsul.cc.lpoo.cv.model.Pessoa;
 import br.edu.ifsul.cc.lpoo.cv.model.dao.PerssistenciaJDBC;
+import java.util.Calendar;
+import java.util.List;
 import javax.swing.JOptionPane;
 import org.junit.Test;
 
@@ -16,7 +19,8 @@ import org.junit.Test;
  * @author José Henrique PG
  */
 public class TestePerssistenciaJDBC {
-     //@Test//ok
+    //@Test//ok
+
     public void testarConexao() throws Exception {
         PerssistenciaJDBC persistencia = new PerssistenciaJDBC();
         if (persistencia.conexaoAberta()) {
@@ -26,32 +30,50 @@ public class TestePerssistenciaJDBC {
             System.out.println("Não abriu conexao BD VET via JDBC!");
         }
     }
-    ///@Test//ok
-    public void testeinsereEspecie() throws Exception{
-        PerssistenciaJDBC perssist_especie = new PerssistenciaJDBC();
-        if(perssist_especie.conexaoAberta()){
-            Especie esp  = (Especie) perssist_especie.find(Especie.class, 6);
-            if(esp == null){
-                System.out.println("Nao encontrou a especie id = 1");
-                esp= new Especie();
-                esp.setNome("Cachorro");
-                perssist_especie.persist(esp);
-                System.out.println("Inseriu a especie "+esp.getNome());;
-            }else{
-                System.out.println("Lista de especie não esta nula"); 
-            }
-             perssist_especie.fecharConexao();
-        }else{
-             System.out.println("Não abriu conexao via JDBC");
-        }
-    }
-    public void testeListaConsulta()throws Exception{
+    @Test
+    public void testeListaConsulta() throws Exception {
         PerssistenciaJDBC perssist_consulta = new PerssistenciaJDBC();
-        if(perssist_consulta.conexaoAberta()){
-            Consulta cons  = (Consulta) perssist_consulta.find(Consulta.class, 8);
-            if(cons == null){
-                JOptionPane.showMessageDialog(null,"Não encontrou nenhuma consulta!");
-                cons = new Consulta();
+        if (perssist_consulta.conexaoAberta()) {
+            List<Consulta> listc = perssist_consulta.ListPerssistConsulta();
+            if (listc.isEmpty()) {
+                System.out.println("Dados da consulta: ");
+                for (Consulta cs : listc) {
+                    System.out.println("\n\n----Dados de consulta----\n"
+                            + "\n Id: " + cs.getId()
+                            + "\n CPF Médico: " + cs.getMedico().getCpf()
+                            + "\n CRMV Médico: " + cs.getMedico().getNumero_crmv()
+                            + "\n Nome do Médico: " + cs.getMedico().getNome()
+                            + "\n Id do Pet: " + cs.getPet().getId()
+                            + "\n Nome do Pet: " + cs.getPet().getNome()
+                            + "\n Receita da Consulta: ");
+                            cs.getReceitas().stream().forEach(r -> System.out.println("Receita{"
+                            + "id=" + r.getId()
+                            + ", orientacao='" + r.getOrientacao() + '\''
+                            + '}'));
+                    cs.getReceitas().stream().forEach(r -> {
+                        try {
+                            perssist_consulta.remover(r);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                    perssist_consulta.remover(cs);
+                }
+            } else {
+                System.out.println("Nenhum dado encontrado em pessoa!");
+                Pessoa pessoaMedico = new Pessoa();
+                pessoaMedico.setTipo("M");
+                pessoaMedico.setCep("6750432");
+                pessoaMedico.setComplemento("Perto Meercadoo");
+                pessoaMedico.setNome("José");
+                pessoaMedico.setCpf("00000000000");
+                pessoaMedico.setData_nascimento(Calendar.getInstance());
+                pessoaMedico.setEmail("medico@mail.com");
+                pessoaMedico.setEndereco("lugar 1, numero 012, Rua");
+                pessoaMedico.setNumero_celular("549345322399");
+                pessoaMedico.setRg("908797884");
+                pessoaMedico.setSenha("123456");
+                perssist_consulta.persist(pessoaMedico);
             }
         }
     }
