@@ -21,10 +21,10 @@ import javax.persistence.Table;
 @DiscriminatorValue("F")
 public class Funcionario extends Pessoa{
     ///Atributos
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String numero_ctps;
     
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String numero_pis;
     
     @Column(nullable = false)
