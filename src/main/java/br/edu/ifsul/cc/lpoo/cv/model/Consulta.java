@@ -39,14 +39,14 @@ public class Consulta implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar data_consulta;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String observacao;
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar data_retorno;
 
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 2)
     private Float valor;
 
     @ManyToOne///associação
