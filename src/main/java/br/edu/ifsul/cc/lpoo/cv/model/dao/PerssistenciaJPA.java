@@ -5,6 +5,10 @@
  */
 package br.edu.ifsul.cc.lpoo.cv.model.dao;
 
+import br.edu.ifsul.cc.lpoo.cv.model.Consulta;
+import br.edu.ifsul.cc.lpoo.cv.model.Funcionario;
+import br.edu.ifsul.cc.lpoo.cv.model.Venda;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -32,6 +36,7 @@ public class PerssistenciaJPA implements InterfacePerssistencia {
     @Override
     public void fecharConexao() {
         entity.close();
+        System.out.println("Fechou a conexão via JPA!");
     }
 
     @Override
@@ -51,5 +56,20 @@ public class PerssistenciaJPA implements InterfacePerssistencia {
         entity.getTransaction().begin();//abre transacao
         entity.remove(o);//persiste (update ou insert)
         entity.getTransaction().commit();//commit na transacao
+    }
+
+    @Override
+    public List<Consulta> ListPerssistConsulta() throws Exception {
+        throw new UnsupportedOperationException("Funcionalidade não suportada até o momento!"); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Venda> ListPerssistVenda() throws Exception {
+        throw new UnsupportedOperationException("Funcionalidade Não suportada até o momento!"); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Funcionario doLogin(String cpf, String senha) throws Exception {
+         throw new UnsupportedOperationException("Funcionalidade Não suportada até o momento!");
     }
 }
