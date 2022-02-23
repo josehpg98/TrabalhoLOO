@@ -27,7 +27,7 @@ public class Especie implements Serializable{
     @GeneratedValue(generator = "seq_especie", strategy = GenerationType.SEQUENCE)
     private Integer id;
     
-    @Column(nullable = false)
+    @Column(nullable = false, length = 80)
     private String nome;
     
     ///Costrutor
