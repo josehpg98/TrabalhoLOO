@@ -31,4 +31,6 @@ public interface InterfacePerssistencia {
     public List<Venda> ListPerssistVenda() throws Exception;
     
     public Funcionario doLogin(String cpf, String senha) throws Exception;
+    
+    public List<Funcionario> getFuncionarios() throws Exception;
 }
