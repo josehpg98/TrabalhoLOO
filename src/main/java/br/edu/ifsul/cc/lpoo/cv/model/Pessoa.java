@@ -10,12 +10,9 @@ import java.util.Calendar;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -32,8 +29,6 @@ public class Pessoa implements Serializable {
 
     ///Atributos
     @Id
-    @SequenceGenerator(name = "seq_pessoa", sequenceName = "seq_pessoa_cpf", allocationSize = 1)
-    @GeneratedValue(generator = "seq_pessoa", strategy = GenerationType.SEQUENCE)
     private String cpf;
 
     @Column(nullable = false, length = 10)
@@ -67,13 +62,18 @@ public class Pessoa implements Serializable {
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar data_cadastro;
-    
+
     @Column(nullable = false)
     private String tipo;
 
     ///Construtor
     public Pessoa() {
 
+    }
+
+    public Pessoa(String cpf, String nome) {///construtor para listgem
+        this.cpf = cpf;
+        this.nome = nome;
     }
 
     ///Métodos Get e Set
@@ -231,7 +231,7 @@ public class Pessoa implements Serializable {
         this.data_cadastro = data_cadastro;
     }
 
-      public String getTipo() {
+    public String getTipo() {
         return tipo;
     }
 
