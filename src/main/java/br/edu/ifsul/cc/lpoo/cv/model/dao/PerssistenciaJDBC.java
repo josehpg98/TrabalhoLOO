@@ -5,11 +5,13 @@
  */
 package br.edu.ifsul.cc.lpoo.cv.model.dao;
 
+import br.edu.ifsul.cc.lpoo.cv.model.Cargo;
 import br.edu.ifsul.cc.lpoo.cv.model.Cliente;
 import br.edu.ifsul.cc.lpoo.cv.model.Consulta;
 import br.edu.ifsul.cc.lpoo.cv.model.Funcionario;
 import br.edu.ifsul.cc.lpoo.cv.model.Medico;
 import br.edu.ifsul.cc.lpoo.cv.model.Pagamento;
+import br.edu.ifsul.cc.lpoo.cv.model.Pessoa;
 import br.edu.ifsul.cc.lpoo.cv.model.Pet;
 import br.edu.ifsul.cc.lpoo.cv.model.Receita;
 import br.edu.ifsul.cc.lpoo.cv.model.Venda;
@@ -268,29 +270,44 @@ public class PerssistenciaJDBC implements InterfacePerssistencia {
         }
         return list_venda;
     }
-    
-      @Override
-    public Funcionario doLogin(String cpf, String senha) throws Exception {
-        
-                
-        Funcionario func = null;
-        
-         PreparedStatement ps = 
-            this.con.prepareStatement("select j.nickname, j.senha from tb_jogador j where j.nickname= ? and j.senha = ? ");
-                        
-            ps.setString(1, cpf);
-            ps.setString(2, senha);
-            
-            ResultSet rs = ps.executeQuery();//o ponteiro do REsultSet inicialmente está na linha -1
-            
-            if(rs.next()){//se a matriz (ResultSet) tem uma linha
 
-                func = new Funcionario();
-                func.setCpf(rs.getString("CPF"));                
-            }
-        
-            ps.close();
-            return func;        
-        
+    @Override
+    public Funcionario doLogin(String cpf, String senha) throws Exception {
+        Funcionario func = null;
+
+        PreparedStatement ps
+                = this.con.prepareStatement("select j.nickname, j.senha from tb_jogador j where j.nickname= ? and j.senha = ? ");
+
+        ps.setString(1, cpf);
+        ps.setString(2, senha);
+
+        ResultSet rs = ps.executeQuery();//o ponteiro do REsultSet inicialmente está na linha -1
+
+        if (rs.next()) {//se a matriz (ResultSet) tem uma linha
+
+            func = new Funcionario();
+            func.setCpf(rs.getString("CPF"));
+        }
+
+        ps.close();
+        return func;
+
     }
+
+    @Override
+    public List<Funcionario> getFuncionarios() throws Exception {
+        List<Funcionario> listfunc = null;
+        PreparedStatement ps = this.con.prepareStatement("select f.cpf,f.numero_ctps,f.numero_pis from tb_funcionario as f");
+        ResultSet rs = ps.executeQuery();
+        listfunc = new ArrayList<>();
+        while (rs.next()) {
+            Funcionario f = new Funcionario();
+            f.setCpf(rs.getString("CPF"));
+            f.setNumero_ctps(rs.getString("numero_ctps"));
+            f.setNumero_pis(rs.getString("numero_pis"));
+            listfunc.add(f);
+        }
+        return listfunc;
+    }
+
 }
