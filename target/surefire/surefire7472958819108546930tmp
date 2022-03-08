@@ -1,8 +1,0 @@
-#surefire
-#Wed Jan 26 15:57:52 BRST 2022
-maven.ext.class.path=C\:\\Program Files\\NetBeans 8.2\\java\\maven-nblib\\netbeans-eventspy.jar
-user.dir=C\:\\Users\\Jos\u00E9 Henrique PG\\Documents\\NetBeansProjects\\ProjetoClinicaVeterinaria
-file.encoding=UTF-8
-localRepository=C\:\\Users\\Jos\u00E9 Henrique PG\\.m2\\repository
-basedir=C\:\\Users\\Jos\u00E9 Henrique PG\\Documents\\NetBeansProjects\\ProjetoClinicaVeterinaria
-test=br.edu.ifsul.lpoo.cv.test.TestePerssistenciaJPA

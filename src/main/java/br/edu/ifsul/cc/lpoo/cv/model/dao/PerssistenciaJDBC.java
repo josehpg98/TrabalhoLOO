@@ -5,7 +5,6 @@
  */
 package br.edu.ifsul.cc.lpoo.cv.model.dao;
 
-import br.edu.ifsul.cc.lpoo.cv.model.Cargo;
 import br.edu.ifsul.cc.lpoo.cv.model.Cliente;
 import br.edu.ifsul.cc.lpoo.cv.model.Consulta;
 import br.edu.ifsul.cc.lpoo.cv.model.Funcionario;
@@ -120,17 +119,17 @@ public class PerssistenciaJDBC implements InterfacePerssistencia {
             ps.setInt(1, Integer.parseInt(id.toString()));
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                Venda vd = new Venda();
-                vd.setId(rs.getInt("id"));
-                Calendar dtv = Calendar.getInstance();
-                dtv.setTimeInMillis(rs.getDate("data").getTime());
-                vd.setData(dtv);
-                vd.setObservacao(rs.getString("observacao"));
-                vd.setPagamento(("pagamento"));
-                vd.setValortotal(rs.getFloat("valortotal"));
-                vd.setCliente((Cliente) find(Cliente.class, rs.getInt("cliente_id")));
-                vd.setFuncionario((Funcionario) find(Cliente.class, rs.getInt("funcionario_id")));
-                return vd;
+                ///Venda vd = new Venda();
+                ///vd.setId(rs.getInt("id"));
+                ///Calendar dtv = Calendar.getInstance();
+                ///dtv.setTimeInMillis(rs.getDate("data").getTime());
+                ///vd.setData(dtv);
+                ///vd.setObservacao(rs.getString("observacao"));
+                ///vd.setPagamento(("pagamento"));
+                ///vd.setValortotal(rs.getFloat("valortotal"));
+                ///vd.setCliente((Cliente) find(Cliente.class, rs.getInt("cliente_id")));
+                ///vd.setFuncionario((Funcionario) find(Cliente.class, rs.getInt("funcionario_id")));
+                ///return vd;
             }
         }
         return null;
@@ -181,11 +180,11 @@ public class PerssistenciaJDBC implements InterfacePerssistencia {
                 ps.executeUpdate();
             }
         } else if (o instanceof Venda) {
-            Venda vd = (Venda) o;
+            /*Venda vd = (Venda) o;
             if (vd.getId() == null) {///insert
                 PreparedStatement ps = this.con.prepareStatement("insert into tb_venda  id, data, observacao, pagamento, valortotal, cliente_id, funcionario_id) values (?,?,?,?,?,?,?)");
                 ps.setInt(1, vd.getId());
-                ps.setTimestamp(2, new Timestamp(vd.getData().getTimeInMillis()));
+                ///ps.setTimestamp(2, new Timestamp(vd.getData().getTimeInMillis()));
                 ps.setString(3, vd.getObservacao());
                 ps.setString(4, "pagamento");
                 ps.setFloat(5, vd.getValortotal());
@@ -195,15 +194,14 @@ public class PerssistenciaJDBC implements InterfacePerssistencia {
             } else {///update
                 PreparedStatement ps = this.con.prepareStatement("update tb_venda set data = ?, observacao = ?, pagamento = ?, valortotal = ?, cliente_id = ?, funcionario_id = ?, where id = ?");
                 ps.setInt(1, vd.getId());
-                ps.setTimestamp(2, new Timestamp(vd.getData().getTimeInMillis()));
+                ///ps.setTimestamp(2, new Timestamp(vd.getData().getTimeInMillis()));
                 ps.setString(3, vd.getObservacao());
                 ps.setString(4, "pagamento");
                 ps.setFloat(5, vd.getValortotal());
                 ps.setString(6, vd.getCliente().getCpf());
                 ps.setString(7, vd.getFuncionario().getNumero_pis());
                 ps.setInt(8, vd.getId());
-                ps.executeUpdate();
-            }
+                ps.executeUpdate();**/
         }
     }
 
@@ -259,39 +257,44 @@ public class PerssistenciaJDBC implements InterfacePerssistencia {
         ResultSet rs = ps.executeQuery();
         list_venda = new ArrayList<>();
         while (rs.next()) {
-            Venda vd = new Venda();
+            /*Venda vd = new Venda();
             vd.setId(rs.getInt("id"));
             vd.setObservacao(rs.getString("observaco"));
             vd.setPagamento(Pagamento.DINHEIRO);
             vd.setValortotal(rs.getFloat("valortotal"));
             vd.setCliente((Cliente) find(Cliente.class, rs.getInt("cliente_id")));
             vd.setFuncionario((Funcionario) find(Funcionario.class, rs.getInt("funcionario_id")));
-            list_venda.add(vd);
+            list_venda.add(vd);**/
         }
         return list_venda;
     }
 
     @Override
-    public Funcionario doLogin(String cpf, String senha) throws Exception {
-        Funcionario func = null;
-
-        PreparedStatement ps
-                = this.con.prepareStatement("select j.nickname, j.senha from tb_jogador j where j.nickname= ? and j.senha = ? ");
-
+    public Pessoa doLogin(String cpf, String senha) throws Exception {
+        /*Funcionario func = null;
+        PreparedStatement ps = this.con.prepareStatement("select f.cpf,p.senha from tb_pessoa as p,tb_funcionario as f where p.cpf = f.cpf and f.cpf = ? and p.senha = ?");
         ps.setString(1, cpf);
-        ps.setString(2, senha);
-
+        ps.setString(2, ((Pessoa) find(Pessoa.class, senha)));
         ResultSet rs = ps.executeQuery();//o ponteiro do REsultSet inicialmente está na linha -1
-
         if (rs.next()) {//se a matriz (ResultSet) tem uma linha
-
             func = new Funcionario();
-            func.setCpf(rs.getString("CPF"));
+            func.setCpf(rs.getString(cpf));
+            func.setSenha(rs.getString(senha));
         }
-
         ps.close();
-        return func;
-
+        return func;**/
+        Pessoa p = null;
+        PreparedStatement ps = this.con.prepareStatement("select p.cpf,p.senha from tb_pessoa as p where p.cpf = ? and p.senha = ?");
+        ps.setString(1, cpf);
+        ps.setString(2,senha);
+        ResultSet rs = ps.executeQuery();
+        if(rs.next()){
+            p = new Pessoa();
+            p.setCpf(rs.getString("cpf"));
+            p.setSenha(rs.getString("senha"));
+        }
+        ps.close();
+        return p;
     }
 
     @Override
@@ -310,4 +313,60 @@ public class PerssistenciaJDBC implements InterfacePerssistencia {
         return listfunc;
     }
 
+    ///@Override
+    public List<Funcionario> listFuncionarios() throws Exception {        
+        /*List<Jogador> lista = null;                       
+        PreparedStatement ps = this.con.prepareStatement("select j.nickname, j.data_cadastro, j.data_ultimo_login, j.pontos, j.senha, "
+                + "e.id as endereco_id, e.cep "
+                + "from tb_jogador j left join tb_endereco e "
+                + "on j.endereco_id=e.id "
+                + "order by j.data_cadastro asc");     
+        ResultSet rs = ps.executeQuery();//executa a query        
+        lista = new ArrayList();
+        while(rs.next()){          
+            Jogador j = new Jogador();
+            j.setNickname(rs.getString("nickname"));
+                Calendar dtCad = Calendar.getInstance();
+                dtCad.setTimeInMillis(rs.getDate("data_cadastro").getTime());                        
+            j.setData_cadastro(dtCad);
+            if(rs.getDate("data_ultimo_login") != null){
+                Calendar dtU = Calendar.getInstance();
+                dtU.setTimeInMillis(rs.getDate("data_ultimo_login").getTime());
+                j.setData_ultimo_login(dtU);
+            }        
+            j.setPontos(rs.getInt("pontos"));
+            j.setSenha(rs.getString("senha"));
+                Endereco end = new Endereco();
+                end.setId(rs.getInt("endereco_id"));
+                end.setCep(rs.getString("cep"));
+            j.setEndereco(end);
+            PreparedStatement ps2 = this.con.prepareStatement("select p.id, p.cor, p.nome from tb_jogador_patente jp, tb_patente p where p.id=jp.patente_id and jp.jogador_nickname = ? ");
+            ps2.setString(1, j.getNickname());
+            ResultSet rs2 = ps2.executeQuery();
+            while(rs2.next()){
+                Patente p = new Patente();
+                p.setId(rs2.getInt("id"));
+                p.setNome(rs2.getString("nome"));
+                p.setCor(rs2.getString("cor"));
+                j.setPatente(p);
+            }          
+            lista.add(j);                  
+        }                
+        return lista;
+        **/
+        List<Funcionario> listaf = null;
+        String URL = "select f.cpf,f.numero_ctps,f.numero_pis,f.cargo from tb_funcionario as f";
+        PreparedStatement ps = this.con.prepareStatement(URL);
+        ResultSet rs = ps.executeQuery();
+        listaf = new ArrayList<>();
+        while(rs.next()){
+            Funcionario f = new Funcionario();
+            f.setCpf(rs.getString("cpf"));
+            f.setNumero_ctps(rs.getString("numero_ctps"));
+            f.setNumero_pis(rs.getString("numero_pis"));
+            ///f.setCargo("cargo");
+            listaf.add(f);
+        }
+        return listaf;
+    }
 }

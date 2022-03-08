@@ -31,9 +31,9 @@ public class JPanelAutenticacao extends JPanel implements ActionListener {
     private GridBagLayout gridLayout;
     private GridBagConstraints posicionador;
 
-    private JLabel lblNickname;
+    private JLabel lblCPF;
     private JLabel lblSenha;
-    private JTextField txfNickname;
+    private JTextField txfCPF;
     private JPasswordField psfSenha;
     private JButton btnLogar;
     private Border defaultBorder;
@@ -50,22 +50,22 @@ public class JPanelAutenticacao extends JPanel implements ActionListener {
         gridLayout = new GridBagLayout();//inicializando o gerenciador de layout
         this.setLayout(gridLayout);//definie o gerenciador para este painel.
 
-        lblNickname = new JLabel("Nickname:");
-        lblNickname.setToolTipText("lblNickname"); //acessibilidade
+        lblCPF = new JLabel("CPF:");
+        lblCPF.setToolTipText("lblCPF"); //acessibilidade
         posicionador = new GridBagConstraints();
         posicionador.gridy = 0;//policao da linha (vertical)
         posicionador.gridx = 0;// posição da coluna (horizontal)
-        this.add(lblNickname, posicionador);//o add adiciona o rotulo no painel
+        this.add(lblCPF, posicionador);//o add adiciona o rotulo no painel
 
-        txfNickname = new JTextField(10);
-        txfNickname.setFocusable(true);    //acessibilidade    
-        txfNickname.setToolTipText("txfNickname"); //acessibilidade
-        Util.considerarEnterComoTab(txfNickname);
+        txfCPF = new JTextField(10);
+        txfCPF.setFocusable(true);///acessibilidade    
+        txfCPF.setToolTipText("txfCPF"); //acessibilidade
+        Util.considerarEnterComoTab(txfCPF);
         posicionador = new GridBagConstraints();
         posicionador.gridy = 0;//policao da linha (vertical)
         posicionador.gridx = 1;// posição da coluna (horizontal)
-        defaultBorder = txfNickname.getBorder();
-        this.add(txfNickname, posicionador);//o add adiciona o rotulo no painel        
+        defaultBorder = txfCPF.getBorder();
+        this.add(txfCPF, posicionador);//o add adiciona o rotulo no painel        
 
         lblSenha = new JLabel("Senha:");
         lblSenha.setToolTipText("lblSenha"); //acessibilidade        
@@ -97,16 +97,13 @@ public class JPanelAutenticacao extends JPanel implements ActionListener {
     }
 
     public void requestFocus() {
-
-        txfNickname.requestFocus();
+        txfCPF.requestFocus();
     }
 
-    public void cleanForm() {
-
-        txfNickname.setText("");
+    public void cleanForm() {///LIMPA FORMULARIO
+        txfCPF.setText("");
         psfSenha.setText("");
-
-        txfNickname.setBorder(defaultBorder);
+        txfCPF.setBorder(defaultBorder);
         psfSenha.setBorder(defaultBorder);
     }
 
@@ -117,19 +114,19 @@ public class JPanelAutenticacao extends JPanel implements ActionListener {
         if (e.getActionCommand().equals(btnLogar.getActionCommand())) {
 
             //validacao do formulario.
-            if (txfNickname.getText().trim().length() > 4) {
+            if (txfCPF.getText().trim().length() > 10) {
 
-                txfNickname.setBorder(new LineBorder(Color.green, 1));
+                txfCPF.setBorder(new LineBorder(Color.green, 1));
 
-                if (new String(psfSenha.getPassword()).trim().length() > 3) {
+                if (new String(psfSenha.getPassword()).trim().length() > 4) {
 
                     psfSenha.setBorder(new LineBorder(Color.green, 1));
 
-                    controle.autenticar(txfNickname.getText().trim(), new String(psfSenha.getPassword()).trim());
+                    controle.autenticar(txfCPF.getText().trim(), new String(psfSenha.getPassword()).trim());
 
                 } else {
 
-                    JOptionPane.showMessageDialog(this, "Informe Senha com 4 ou mais dígitos", "Autenticação", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Informe Senha com 4 ou mais dígitos!", "Autenticação", JOptionPane.ERROR_MESSAGE);
                     psfSenha.setBorder(new LineBorder(Color.red, 1));
                     psfSenha.requestFocus();
 
@@ -137,9 +134,9 @@ public class JPanelAutenticacao extends JPanel implements ActionListener {
 
             } else {
 
-                JOptionPane.showMessageDialog(this, "Informe Nickname com 4 ou mais dígitos", "Autenticação", JOptionPane.ERROR_MESSAGE);
-                txfNickname.setBorder(new LineBorder(Color.red, 1));
-                txfNickname.requestFocus();
+                JOptionPane.showMessageDialog(this, "Informe CPF com 11 dígitos!", "Autenticação", JOptionPane.ERROR_MESSAGE);
+                txfCPF.setBorder(new LineBorder(Color.red, 1));
+                txfCPF.requestFocus();
             }
 
         }

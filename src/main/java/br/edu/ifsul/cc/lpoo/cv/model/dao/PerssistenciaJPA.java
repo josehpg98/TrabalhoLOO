@@ -77,4 +77,9 @@ public class PerssistenciaJPA implements InterfacePerssistencia {
     public List<Funcionario> getFuncionarios() throws Exception {
         throw new UnsupportedOperationException("Funcionalidade não suportada até o momento!"); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public List<Funcionario> listFuncionarios() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
