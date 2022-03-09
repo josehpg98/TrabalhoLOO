@@ -5,14 +5,18 @@
  */
 package br.edu.ifsul.cc.lpoo.cv.model.dao;
 
+import br.edu.ifsul.cc.lpoo.cv.model.Cargo;
 import br.edu.ifsul.cc.lpoo.cv.model.Cliente;
 import br.edu.ifsul.cc.lpoo.cv.model.Consulta;
+import br.edu.ifsul.cc.lpoo.cv.model.Fornecedor;
 import br.edu.ifsul.cc.lpoo.cv.model.Funcionario;
 import br.edu.ifsul.cc.lpoo.cv.model.Medico;
 import br.edu.ifsul.cc.lpoo.cv.model.Pagamento;
 import br.edu.ifsul.cc.lpoo.cv.model.Pessoa;
 import br.edu.ifsul.cc.lpoo.cv.model.Pet;
+import br.edu.ifsul.cc.lpoo.cv.model.Produto;
 import br.edu.ifsul.cc.lpoo.cv.model.Receita;
+import br.edu.ifsul.cc.lpoo.cv.model.TipoProduto;
 import br.edu.ifsul.cc.lpoo.cv.model.Venda;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -274,21 +278,20 @@ public class PerssistenciaJDBC implements InterfacePerssistencia {
         /*Funcionario func = null;
         PreparedStatement ps = this.con.prepareStatement("select f.cpf,p.senha from tb_pessoa as p,tb_funcionario as f where p.cpf = f.cpf and f.cpf = ? and p.senha = ?");
         ps.setString(1, cpf);
-        ps.setString(2, ((Pessoa) find(Pessoa.class, senha)));
+        ps.setString(2, senha);
         ResultSet rs = ps.executeQuery();//o ponteiro do REsultSet inicialmente está na linha -1
         if (rs.next()) {//se a matriz (ResultSet) tem uma linha
             func = new Funcionario();
-            func.setCpf(rs.getString(cpf));
-            func.setSenha(rs.getString(senha));
+            func.setSenha((Pessoa) find(Pessoa.class, rs.getString("cpf_pessoa")));
         }
         ps.close();
         return func;**/
         Pessoa p = null;
-        PreparedStatement ps = this.con.prepareStatement("select p.cpf,p.senha from tb_pessoa as p where p.cpf = ? and p.senha = ?");
+        PreparedStatement ps = this.con.prepareStatement("select p.cpf,p.senha from tb_pessoa as p,tb_funcionario as f where p.cpf = f.cpf and p.cpf = ? and p.senha = ?");
         ps.setString(1, cpf);
-        ps.setString(2,senha);
+        ps.setString(2, senha);
         ResultSet rs = ps.executeQuery();
-        if(rs.next()){
+        if (rs.next()) {
             p = new Pessoa();
             p.setCpf(rs.getString("cpf"));
             p.setSenha(rs.getString("senha"));
@@ -314,59 +317,57 @@ public class PerssistenciaJDBC implements InterfacePerssistencia {
     }
 
     ///@Override
-    public List<Funcionario> listFuncionarios() throws Exception {        
-        /*List<Jogador> lista = null;                       
-        PreparedStatement ps = this.con.prepareStatement("select j.nickname, j.data_cadastro, j.data_ultimo_login, j.pontos, j.senha, "
-                + "e.id as endereco_id, e.cep "
-                + "from tb_jogador j left join tb_endereco e "
-                + "on j.endereco_id=e.id "
-                + "order by j.data_cadastro asc");     
-        ResultSet rs = ps.executeQuery();//executa a query        
-        lista = new ArrayList();
-        while(rs.next()){          
-            Jogador j = new Jogador();
-            j.setNickname(rs.getString("nickname"));
-                Calendar dtCad = Calendar.getInstance();
-                dtCad.setTimeInMillis(rs.getDate("data_cadastro").getTime());                        
-            j.setData_cadastro(dtCad);
-            if(rs.getDate("data_ultimo_login") != null){
-                Calendar dtU = Calendar.getInstance();
-                dtU.setTimeInMillis(rs.getDate("data_ultimo_login").getTime());
-                j.setData_ultimo_login(dtU);
-            }        
-            j.setPontos(rs.getInt("pontos"));
-            j.setSenha(rs.getString("senha"));
-                Endereco end = new Endereco();
-                end.setId(rs.getInt("endereco_id"));
-                end.setCep(rs.getString("cep"));
-            j.setEndereco(end);
-            PreparedStatement ps2 = this.con.prepareStatement("select p.id, p.cor, p.nome from tb_jogador_patente jp, tb_patente p where p.id=jp.patente_id and jp.jogador_nickname = ? ");
-            ps2.setString(1, j.getNickname());
-            ResultSet rs2 = ps2.executeQuery();
-            while(rs2.next()){
-                Patente p = new Patente();
-                p.setId(rs2.getInt("id"));
-                p.setNome(rs2.getString("nome"));
-                p.setCor(rs2.getString("cor"));
-                j.setPatente(p);
-            }          
-            lista.add(j);                  
-        }                
-        return lista;
-        **/
+    public List<Funcionario> listFuncionarios() throws Exception {
         List<Funcionario> listaf = null;
         String URL = "select f.cpf,f.numero_ctps,f.numero_pis,f.cargo from tb_funcionario as f";
         PreparedStatement ps = this.con.prepareStatement(URL);
         ResultSet rs = ps.executeQuery();
         listaf = new ArrayList<>();
-        while(rs.next()){
+        while (rs.next()) {
             Funcionario f = new Funcionario();
             f.setCpf(rs.getString("cpf"));
             f.setNumero_ctps(rs.getString("numero_ctps"));
             f.setNumero_pis(rs.getString("numero_pis"));
-            ///f.setCargo("cargo");
+            f.setCargo(Cargo.getCargo(rs.getString("cargo")));
             listaf.add(f);
         }
         return listaf;
+    }
+
+    public List<Cliente> listClientes() throws Exception {
+        List<Cliente> listaC = null;
+        String URL = "select c.cpf,p.nome,c.data_ultima_visita from tb_cliente as c,tb_pessoa as p where p.cpf = c.cpf order by p.nome asc";
+        PreparedStatement ps = this.con.prepareStatement(URL);
+        ResultSet rs = ps.executeQuery();
+        listaC = new ArrayList<>();
+        while (rs.next()) {
+            Cliente cli = new Cliente();
+            cli.setCpf(rs.getString("cpf"));
+            Calendar dtuv = Calendar.getInstance();
+            dtuv.setTimeInMillis(rs.getDate("data_ltima_visita").getTime());
+            cli.setData_ultima_visita(dtuv);
+            cli.setNome(rs.getString("nome"));
+            listaC.add(cli);
+        }
+        return listaC;
+    }
+
+    public List<Produto> listProdutos() throws Exception {
+        List<Produto> listprodutos = null;
+        String URL = "select id,nome,quantidade,tipo,valor,fornecedor_id from tb_produto order by id asc";
+        PreparedStatement ps = this.con.prepareStatement(URL);
+        ResultSet rs = ps.executeQuery();
+        listprodutos = new ArrayList<>();
+        while(rs.next()){
+            Produto pd = new Produto();
+            pd.setId(rs.getInt("id"));
+            pd.setNome(rs.getString("nome"));
+            pd.setQuantidade(rs.getFloat("quantidade"));
+            pd.setTipo(TipoProduto.valueOf("TipoProduto"));
+            pd.setValor(rs.getFloat("valor"));
+            pd.setFornecedor( (Fornecedor) find(Fornecedor.class, rs.getInt("fornecedor_id")));
+            listprodutos.add(pd);
+        }
+        return listprodutos;
     }
 }

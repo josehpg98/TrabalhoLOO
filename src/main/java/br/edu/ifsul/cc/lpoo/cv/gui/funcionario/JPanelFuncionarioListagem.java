@@ -66,11 +66,11 @@ public class JPanelFuncionarioListagem extends javax.swing.JPanel {
 
             },
             new String [] {
-                "CPF", "N°. CTPS", "N°. PIS"
+                "CPF", "N°. CTPS", "N°. PIS", "Cargo"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, false, true
+                true, false, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

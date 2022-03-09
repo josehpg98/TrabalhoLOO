@@ -30,7 +30,7 @@ public class Controle {
     private JPanelHome pnlHome;/// painel de boas vindas (home)
     private JPanelFuncionario pnlFuncionario;/// painel de manutencao para funcionario.
     private JPanelAFuncionario pnlAFuncionario;///painel manutenção funcionario
-    ///private JPanelAVenda pnlAVenda;
+    private JPanelAVenda pnlAVenda;
 
     ///construtor.
     public Controle() {

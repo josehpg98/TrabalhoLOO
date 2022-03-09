@@ -31,6 +31,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "tb_venda")
 public class Venda implements Serializable {
+
     ///Atributos
     @Id
     @SequenceGenerator(name = "seq_venda", sequenceName = "seq_venda_id", allocationSize = 1)
@@ -56,13 +57,17 @@ public class Venda implements Serializable {
     private Funcionario funcionario;
 
     @ManyToMany
-    @JoinTable(name = "tb_venda_produtos", joinColumns = {@JoinColumn(name = "venda_id")}, //agregacao, vai gerar uma tabela associativa.
-            inverseJoinColumns = {@JoinColumn(name = "produto_id")})
+    @JoinTable(name = "tb_venda_produtos", joinColumns = {
+        @JoinColumn(name = "venda_id")}, //agregacao, vai gerar uma tabela associativa.
+            inverseJoinColumns = {
+                @JoinColumn(name = "produto_id")})
     private List<Produto> produtos;
 
     @ManyToMany
-    @JoinTable(name = "tb_venda_consultas", joinColumns = {@JoinColumn(name = "venda_id")}, //agregacao, vai gerar uma tabela associativa.
-            inverseJoinColumns = {@JoinColumn(name = "consulta_id")})
+    @JoinTable(name = "tb_venda_consultas", joinColumns = {
+        @JoinColumn(name = "venda_id")}, //agregacao, vai gerar uma tabela associativa.
+            inverseJoinColumns = {
+                @JoinColumn(name = "consulta_id")})
     private List<Consulta> consultas;
 
     @Column(nullable = false)
@@ -173,7 +178,7 @@ public class Venda implements Serializable {
         this.funcionario = funcionario;
     }
 
-     /**
+    /**
      * @return the produtos
      */
     public List<Produto> getProdutos() {
@@ -199,5 +204,9 @@ public class Venda implements Serializable {
      */
     public void setConsultas(List<Consulta> consultas) {
         this.consultas = consultas;
+    }
+
+    public Integer toInt() {
+        return id;
     }
 }
