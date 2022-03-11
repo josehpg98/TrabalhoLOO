@@ -72,7 +72,7 @@ public class Controle {
         try {
             Pessoa p = getConexaoJDBC().doLogin(cpf, senha);
             if (p != null) {
-                JOptionPane.showMessageDialog(pnlAutenticacao, "Funcionario  " + p.getNome() + " autenticado com sucesso!", "Autenticação", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(pnlAutenticacao, "Funcionario  "+p.getCpf()+" autenticado com sucesso!", "Autenticação", JOptionPane.INFORMATION_MESSAGE);
                 frame.setJMenuBar(menuBar);//adiciona o menu de barra no frame
                 frame.showTela("tela_home");//muda a tela para o painel de boas vindas (home)
             } else {

@@ -40,7 +40,6 @@ public class JPanelAutenticacao extends JPanel implements ActionListener {
 
     //construtor da classe que recebe um parametro.
     public JPanelAutenticacao(Controle controle) {
-
         this.controle = controle;
         initComponents();
     }

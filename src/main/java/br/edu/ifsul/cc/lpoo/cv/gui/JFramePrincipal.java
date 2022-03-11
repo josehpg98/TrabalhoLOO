@@ -70,6 +70,7 @@ public class JFramePrincipal extends JFrame implements WindowListener {
         System.out.println("Fechando o jframe ..");
          //?fechar a conexao com o banco de dados. ???????
         controle.fecharBD();
+        System.exit(0);
         //fechar o processo... ok
     }
 

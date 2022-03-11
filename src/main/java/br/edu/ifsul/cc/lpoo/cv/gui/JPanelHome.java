@@ -24,6 +24,7 @@ public class JPanelHome extends JPanel {
 
     private JLabel lblMensagem;
     private JLabel lblImagem;
+    private JLabel lblautor;
     private JLabel lblData;
     private BorderLayout layoutGeo;
 
@@ -40,20 +41,23 @@ public class JPanelHome extends JPanel {
         layoutGeo = new BorderLayout();
         this.setLayout(layoutGeo);//seta o gerenciador de layout para este painel.
 
-        lblMensagem = new JLabel("Tela de Boas Vindas ao Sistema!");
+        lblMensagem = new JLabel("Bem vindo(a)!");
         lblMensagem.setHorizontalAlignment(SwingConstants.CENTER);
         this.add(lblMensagem, BorderLayout.NORTH);
 
-        ///lblImagem = new JLabel(new ImageIcon(JPanelHome.class.getResource("/images/logo_ifsul_color.png")));
-        ///this.add(lblImagem, BorderLayout.CENTER);//adiciona a imagem na parte central deste painel.
+        lblImagem = new JLabel(new ImageIcon(JPanelHome.class.getResource("/images/logo_ifsul_color.png")));
+        this.add(lblImagem, BorderLayout.CENTER);//adiciona a imagem na parte central deste painel.
 
-        Calendar c = Calendar.getInstance();//recupera a data atual do computador.
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        ///Calendar c = Calendar.getInstance();//recupera a data atual do computador.
+        ///SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        ///lblData = new JLabel(df.format(c.getTime()));
+        ///lblData.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+        ///lblData.setHorizontalAlignment(SwingConstants.LEFT);
+        ///this.add(lblData, BorderLayout.NORTH); //adiciona o rotulo para a data na parte inferior deste painel.       
 
-        lblData = new JLabel(df.format(c.getTime()));
-        lblData.setBorder(BorderFactory.createLineBorder(Color.GREEN));
-        lblData.setHorizontalAlignment(SwingConstants.CENTER);
-        this.add(lblData, BorderLayout.SOUTH); //adiciona o rotulo para a data na parte inferior deste painel.       
-
+        lblautor = new JLabel("Desenvolvido por José Henrique Paludo Giombelli");
+        lblautor.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+        lblautor.setHorizontalAlignment(SwingConstants.CENTER);
+        this.add(lblautor, BorderLayout.SOUTH);
     }
 }

@@ -10,6 +10,7 @@ import java.awt.MenuItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import javax.swing.JButton;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -111,13 +112,13 @@ public class JMenuBarHome extends JMenuBar implements ActionListener {
             }
 
         } else if (e.getActionCommand().equals(menuItemFuncionario.getActionCommand())) {
-
             //se o usuario clicou no menuitem Usuario            
             controle.showTela("tela_funcionario_a");
 
         } else if (e.getActionCommand().equals(menuItemLogout.getActionCommand())) {
-
             controle.showTela("tela_autenticacao");
+        }else if(e.getActionCommand().equals(menuItemVenda.getActionCommand())){
+            controle.showTela("tela_venda");
         }
 
     }
