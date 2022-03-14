@@ -3,10 +3,8 @@ package br.edu.ifsul.cc.lpoo.cv1;
 import br.edu.ifsul.cc.lpoo.cv.gui.JFramePrincipal;
 import br.edu.ifsul.cc.lpoo.cv.gui.JMenuBarHome;
 import br.edu.ifsul.cc.lpoo.cv.gui.JPanelHome;
-import br.edu.ifsul.cc.lpoo.cv.gui.funcionario.JPanelFuncionario;
 import br.edu.ifsul.cc.lpoo.cv.gui.funcionario.acessibilidade.JPanelAFuncionario;
 import br.edu.ifsul.cc.lpoo.cv.gui.venda.acessibilidade.JPanelAVenda;
-import br.edu.ifsul.cc.lpoo.cv.model.Funcionario;
 import br.edu.ifsul.cc.lpoo.cv.model.Pessoa;
 import br.edu.ifsul.cc.lpoo.cv.model.dao.PerssistenciaJDBC;
 import br.edu.ifsul.lpoo.cv.gui.autenticacao.JPanelAutenticacao;
@@ -28,7 +26,7 @@ public class Controle {
     private JPanelAutenticacao pnlAutenticacao;///painel para a autenticacao do funcionario.
     private JMenuBarHome menuBar;///menu principal
     private JPanelHome pnlHome;/// painel de boas vindas (home)
-    private JPanelFuncionario pnlFuncionario;/// painel de manutencao para funcionario.
+    ///private JPanelFuncionario pnlFuncionario;/// painel de manutencao para funcionario.
     private JPanelAFuncionario pnlAFuncionario;///painel manutenção funcionario
     private JPanelAVenda pnlAVenda;
 
@@ -51,19 +49,16 @@ public class Controle {
     }
 
     public void initComponents() {
-        //inicia a interface gráfica.
-        //"caminho feliz" : passo 5 
         frame = new JFramePrincipal();
         pnlAutenticacao = new JPanelAutenticacao(this);
         menuBar = new JMenuBarHome(this);
         pnlHome = new JPanelHome(this);
-        pnlFuncionario = new JPanelFuncionario(this);
         pnlAFuncionario = new JPanelAFuncionario(this);
+        pnlAVenda = new JPanelAVenda(this);
         frame.addTela(pnlAutenticacao, "tela_autenticacao");//carta 1
         frame.addTela(pnlHome, "tela_home");//carta 2
+         frame.addTela(pnlAVenda, "tela_venda_a");
         frame.addTela(pnlAFuncionario, "tela_funcionario_a");//carta 3 - poderia adicionar opcionalmente: pnlJogador
-        frame.addTela(pnlFuncionario, "tela_funcionario_design");//carta 3 - poderia adicionar opcionalmente: pnlJogador
-        ///frame.addTela(pnlAVenda, "tela_venda_a");
         frame.showTela("tela_autenticacao"); // apreseta a carta cujo nome é "tela_autenticacao"  
         frame.setVisible(true); // torna visível o jframe
     }
@@ -72,7 +67,7 @@ public class Controle {
         try {
             Pessoa p = getConexaoJDBC().doLogin(cpf, senha);
             if (p != null) {
-                JOptionPane.showMessageDialog(pnlAutenticacao, "Funcionario  "+p.getCpf()+" autenticado com sucesso!", "Autenticação", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(pnlAutenticacao, "Funcionario  "+p.getNome()+" autenticado com sucesso!", "Autenticação", JOptionPane.INFORMATION_MESSAGE);
                 frame.setJMenuBar(menuBar);//adiciona o menu de barra no frame
                 frame.showTela("tela_home");//muda a tela para o painel de boas vindas (home)
             } else {
@@ -88,13 +83,15 @@ public class Controle {
             pnlAutenticacao.cleanForm();
             frame.showTela(nomeTela);
             pnlAutenticacao.requestFocus();
-        } else if (nomeTela.equals("tela_funcionario_a")) {
+        } else if(nomeTela.equals("tela_home")) {
+            frame.showTela(nomeTela);
+        } else if(nomeTela.equals("tela_funcionario_a")) {
             pnlAFuncionario.showTela("tela_funcionario_listagem");
             frame.showTela(nomeTela);
-        } ///else if (nomeTela.equals("tela_venda_a")) {
-            ///pnlAVenda.showTela("tela_venda_listagem");
-            ///frame.showTela(nomeTela);
-        ///}
+        }else if(nomeTela.equals("tela_venda_a")){
+            pnlAVenda.showTela("tela_venda_listagem");
+            frame.showTela(nomeTela);
+        }
     }
 
     public PerssistenciaJDBC getConexaoJDBC() {

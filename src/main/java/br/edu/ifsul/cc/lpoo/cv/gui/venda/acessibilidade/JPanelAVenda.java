@@ -38,7 +38,9 @@ public class JPanelAVenda extends JPanel {
         if(nomeTela.equals("tela_venda_listagem")){
            listagemvenda.populaTable();
         }else if(nomeTela.equals("tela_venda_formulario")){
-            getFormulario();
+            getFormulario().PopulaComboCliente();
+            getFormulario().PopulaComboFuncionario();
+            getFormulario().PopulaComboPagamento();
         }
         cardLayout.show(this, nomeTela);
     }

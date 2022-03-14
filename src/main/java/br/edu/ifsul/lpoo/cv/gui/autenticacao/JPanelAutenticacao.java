@@ -108,37 +108,26 @@ public class JPanelAutenticacao extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         //testa para verificar se o botão btnLogar foi clicado.
         if (e.getActionCommand().equals(btnLogar.getActionCommand())) {
-
             //validacao do formulario.
             if (txfCPF.getText().trim().length() > 10) {
-
                 txfCPF.setBorder(new LineBorder(Color.green, 1));
-
                 if (new String(psfSenha.getPassword()).trim().length() > 4) {
-
                     psfSenha.setBorder(new LineBorder(Color.green, 1));
 
                     controle.autenticar(txfCPF.getText().trim(), new String(psfSenha.getPassword()).trim());
 
                 } else {
-
                     JOptionPane.showMessageDialog(this, "Informe Senha com 4 ou mais dígitos!", "Autenticação", JOptionPane.ERROR_MESSAGE);
                     psfSenha.setBorder(new LineBorder(Color.red, 1));
                     psfSenha.requestFocus();
-
                 }
-
             } else {
-
                 JOptionPane.showMessageDialog(this, "Informe CPF com 11 dígitos!", "Autenticação", JOptionPane.ERROR_MESSAGE);
                 txfCPF.setBorder(new LineBorder(Color.red, 1));
                 txfCPF.requestFocus();
             }
-
         }
-
     }
 }

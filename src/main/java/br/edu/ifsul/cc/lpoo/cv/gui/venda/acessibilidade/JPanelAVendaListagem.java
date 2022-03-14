@@ -35,17 +35,17 @@ public class JPanelAVendaListagem extends JPanel implements ActionListener {
     private JPanelAVenda pnlAVenda;
     private Controle controle;
     private BorderLayout borderLayout;
-    private JPanel pnlNorte;
+    private JPanel pnlCentro;
     private JLabel lblFiltro;
     private JTextField txfFiltro;
     private JButton btnFiltro;
-    private JPanel pnlCentro;
+
     private JScrollPane scpListagem;
     private JTable tblListagem;
     private DefaultTableModel modeloTabela;
     private JPanel pnlSul;
-    private JButton btnNovo;
-    private JButton btnAlterar;
+    private JButton btnCriar;
+    private JButton btnEditar;
     private JButton btnRemover;
     private SimpleDateFormat format;
 
@@ -61,8 +61,7 @@ public class JPanelAVendaListagem extends JPanel implements ActionListener {
         try {
             List<Venda> listVendas = controle.getConexaoJDBC().ListPerssistVenda();
             for (Venda v : listVendas) {
-                ///model.addRow(new Object[] f, format(f.getCpf().gettex));
-                ///j.getData_cadastro().getTime()), j.getData_ultimo_login(), j.getEndereco().getCep()}
+                 model.addRow(new Object[]{v.getId(), format.format(v.getData().getTime()), v.getObservacao(), v.getPagamento(), v.getValortotal(), v.getCliente(), v.getFuncionario()});
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Erro ao listar Vendas -:" + ex.getLocalizedMessage(), "  Vendas ", JOptionPane.ERROR_MESSAGE);
@@ -73,46 +72,51 @@ public class JPanelAVendaListagem extends JPanel implements ActionListener {
     private void initComponents() {
         borderLayout = new BorderLayout();
         this.setLayout(borderLayout);///seta o gerenciado border para este painel
-        pnlNorte = new JPanel();
-        pnlNorte.setLayout(new FlowLayout());
-        lblFiltro = new JLabel("Filtrar:");
-        pnlNorte.add(lblFiltro);
-        txfFiltro = new JTextField(20);
-        pnlNorte.add(txfFiltro);
-        btnFiltro = new JButton("Filtrar");
-        btnFiltro.addActionListener(this);
-        btnFiltro.setFocusable(true);///acessibilidade    
-        btnFiltro.setToolTipText("btnFiltrar");///acessibilidade  
-        btnFiltro.setActionCommand("botao_filtro");
-        pnlNorte.add(btnFiltro);
-        this.add(pnlNorte, BorderLayout.NORTH);//adiciona o painel na posicao norte.
+        
         pnlCentro = new JPanel();
         pnlCentro.setLayout(new BorderLayout());
+        
         scpListagem = new JScrollPane();
         tblListagem = new JTable();
+
         modeloTabela = new DefaultTableModel(
-                new String[]{
-                    "Observação"
-                }, 0);
+                new Object[][]{}, new String[]{
+                    "ID", "Data_Venda", "Observação", "Pagamento", "Valor_Total", "Cliente", "Funcionario"
+                }
+        ) {
+            boolean[] canEdit = new boolean[]{
+                false, false, false, false, false, false, false
+            };
+
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        };
         tblListagem.setModel(modeloTabela);
         scpListagem.setViewportView(tblListagem);
+        
         pnlCentro.add(scpListagem, BorderLayout.CENTER);
         this.add(pnlCentro, BorderLayout.CENTER);//adiciona o painel na posicao norte.
-        pnlSul = new JPanel();
+        
+        pnlSul = new JPanel();       
         pnlSul.setLayout(new FlowLayout());
-        btnNovo = new JButton("Novo");
-        btnNovo.addActionListener(this);
-        btnNovo.setFocusable(true);///acessibilidade    
-        btnNovo.setToolTipText("btnNovo");///acessibilidade
-        btnNovo.setMnemonic(KeyEvent.VK_N);
-        btnNovo.setActionCommand("botao_novo");
-        pnlSul.add(btnNovo);
-        btnAlterar = new JButton("Editar");
-        btnAlterar.addActionListener(this);
-        btnAlterar.setFocusable(true);///acessibilidade    
-        btnAlterar.setToolTipText("btnAlterar");///acessibilidade
-        btnAlterar.setActionCommand("botao_alterar");
-        pnlSul.add(btnAlterar);
+        
+        btnCriar = new JButton("Novo");
+        btnCriar.addActionListener(this);
+        btnCriar.setFocusable(true);///acessibilidade    
+        btnCriar.setToolTipText("Criar");///acessibilidade
+        btnCriar.setMnemonic(KeyEvent.VK_N);
+        btnCriar.setActionCommand("botao_criar");
+        pnlSul.add(btnCriar);
+        
+        btnEditar = new JButton("Editar");
+        btnEditar.addActionListener(this);
+        btnEditar.setFocusable(true);///acessibilidade    
+        btnEditar.setToolTipText("btnEditar");///acessibilidade
+        btnEditar.setActionCommand("botao_alterar");
+        pnlSul.add(btnEditar);
+        
         btnRemover = new JButton("Remover");
         btnRemover.addActionListener(this);
         btnRemover.setFocusable(true);///acessibilidade    
@@ -125,14 +129,14 @@ public class JPanelAVendaListagem extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent arg0) {
-         if (arg0.getActionCommand().equals(btnNovo.getActionCommand())) {
+         if (arg0.getActionCommand().equals(btnCriar.getActionCommand())) {
             pnlAVenda.showTela("tela_venda_formulario");
             pnlAVenda.getFormulario().setVendaFormulario(null);///limpando o formulário.                        
-        } else if (arg0.getActionCommand().equals(btnAlterar.getActionCommand())) {
+        } else if (arg0.getActionCommand().equals(btnEditar.getActionCommand())) {
             int indice = tblListagem.getSelectedRow();///recupera a linha selecionada
             if (indice > -1) {
                 DefaultTableModel model = (DefaultTableModel) tblListagem.getModel();///recuperacao do modelo da table
-                Vector linha = (Vector) model.getDataVector().get(indice);///recupera o vetor de dados da linha selecionada
+                Vector linha = (Vector) model.getDataVector().get(0);///recupera o vetor de dados da linha selecionada
                 Venda v = (Venda) linha.get(0); //model.addRow(new Object[]{u, u.getNome(), ...
                 pnlAVenda.showTela("tela_venda_formulario");
                 pnlAVenda.getFormulario().setVendaFormulario(v);
@@ -144,7 +148,9 @@ public class JPanelAVendaListagem extends JPanel implements ActionListener {
             if (indice > -1) {
                 DefaultTableModel model = (DefaultTableModel) tblListagem.getModel(); //recuperacao do modelo da table
                 Vector linha = (Vector) model.getDataVector().get(indice);//recupera o vetor de dados da linha selecionada
-                Venda v = (Venda) linha.get(0); //model.addRow(new Object[]{u, u.getNome(), ...
+                ///Venda v = (Venda) linha.get(0); //model.addRow(new Object[]{u, u.getNome(), ...
+                Venda v = new Venda();
+                v.setId((Integer) linha.get(0));
                 try {
                     pnlAVenda.getControle().getConexaoJDBC().remover(v);
                     JOptionPane.showMessageDialog(this, "Venda removida!", "Venda", JOptionPane.INFORMATION_MESSAGE);

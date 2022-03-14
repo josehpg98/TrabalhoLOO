@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.print.DocFlavor;
 
 /**
  *
@@ -64,4 +65,7 @@ public class Cliente extends Pessoa{
         this.pets = pets;
     }
     
+    public String toString(){///retorna o cpf no combo box
+        return getCpf();
+    }
 }

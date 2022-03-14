@@ -24,23 +24,22 @@ public class JPanelAFuncionario extends JPanel{
         initComponents();
     }
     
-    private void initComponents(){  
+    private void initComponents(){         
         cardLayout = new CardLayout();
-        this.setLayout(cardLayout);
+        this.setLayout(cardLayout);  
         formulario = new JPanelAFuncionarioFormulario(this, controle);
-        listagem = new JPanelAFuncionarioListagem(this, controle);
+        listagem = new JPanelAFuncionarioListagem(this, controle);    
         this.add(getFormulario(), "tela_funcionario_formulario");
-        this.add(listagem, "tela_funcionario_listagem");
-                
+        this.add(listagem, "tela_funcionario_listagem");             
     }
     
     public void showTela(String nomeTela){
         if(nomeTela.equals("tela_funcionario_listagem")){        
             listagem.populaTable();          
         }else if(nomeTela.equals("tela_funcionario_formulario")){ 
-            ///getFormulario().populaComboEndereco();
+            getFormulario().populaComboCargo();
         }  
-        cardLayout.show(this, nomeTela);     
+        cardLayout.show(this, nomeTela); 
     }
 
     /**

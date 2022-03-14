@@ -5,6 +5,7 @@
  */
 package br.edu.ifsul.cc.lpoo.cv.model;
 
+import java.util.ArrayList;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;

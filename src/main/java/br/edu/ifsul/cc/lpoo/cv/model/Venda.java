@@ -206,7 +206,8 @@ public class Venda implements Serializable {
         this.consultas = consultas;
     }
 
-    public Integer toInt() {
-        return id;
-    }
+    
+    ///public Integer toInt() {
+        ///return id;
+    ///}
 }

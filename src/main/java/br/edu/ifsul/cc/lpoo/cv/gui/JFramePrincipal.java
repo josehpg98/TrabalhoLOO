@@ -24,7 +24,6 @@ public class JFramePrincipal extends JFrame implements WindowListener {
     public Controle controle;///*
 
     public JFramePrincipal() {
-
         initComponents();
 
     }

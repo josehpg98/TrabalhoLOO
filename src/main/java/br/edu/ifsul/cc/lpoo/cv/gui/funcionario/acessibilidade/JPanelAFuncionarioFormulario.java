@@ -9,13 +9,19 @@ import br.edu.ifsul.cc.lpoo.cv.model.Cargo;
 import br.edu.ifsul.cc.lpoo.cv.model.Funcionario;
 import br.edu.ifsul.cc.lpoo.cv1.Controle;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -24,6 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
 
 /**
  *
@@ -33,188 +40,443 @@ public class JPanelAFuncionarioFormulario extends JPanel implements ActionListen
 
     private JPanelAFuncionario pnlAFuncionario;
     private Controle controle;
+
     private BorderLayout borderLayout;
     private JTabbedPane tbpAbas;
     private JPanel pnlDadosCadastrais;
-    private JPanel pnlCentroDadosCadastrais;
+
     private GridBagLayout gridBagLayoutDadosCadastrais;
 
-    private JLabel lblCPF;
-    private JTextField txfCPF;
+    private JLabel lblNome;
+    private JTextField txfNome;
+
     private JLabel lblSenha;
     private JPasswordField txfSenha;
-    private JLabel lblCTPS;
-    private JTextField txfCTPS;
-    private JLabel lblPIS;
-    private JTextField txfPIS;
-    private JTextField lblcargo;
-    private JComboBox cbxcargo;
+
+    private JLabel lblCpf;
+    private JTextField txfCpf;
+
+    private JLabel lblCep;
+    private JTextField txfCep;
+
+    private JLabel lblComplemento;
+    private JTextField txfComplemento;
+
+    private JLabel lblDataCadastro;
+    private JTextField txfDataCadastro;
+
+    private JLabel lblDataNascimento;
+    private JTextField txfDataNascimento;
+
+    private JLabel lblEmail;
+    private JTextField txfEmail;
+
+    private JLabel lblEndereco;
+    private JTextField txfEndereco;
+
+    private JLabel lblNumeroCelular;
+    private JTextField txfNumeroCelular;
+
+    private JLabel lblRg;
+    private JTextField txfRg;
+
+    private JLabel lblCargo;
+    private JComboBox cbxCargo;
+
+    private JLabel lblCtps;
+    private JTextField txfCtps;
+
+    private JLabel lblPis;
+    private JTextField txfPis;
 
     private Funcionario funcionario;
-    private SimpleDateFormat format;
+    private SimpleDateFormat sdfformat;
+
     private JPanel pnlSul;
-    private JButton btnGravar;
+    private JButton btnSalvar;
     private JButton btnCancelar;
 
-    ///private JPanel pnlDadosCompras;
-    ///private JPanel pnlDadosArtefatos;
-    ///private JPanel pnlDadosPatentes;
     public JPanelAFuncionarioFormulario(JPanelAFuncionario pnlAFuncionario, Controle controle) {
         this.pnlAFuncionario = pnlAFuncionario;
         this.controle = controle;
+        this.sdfformat = new SimpleDateFormat("dd/MM/yyyy");
+
         initComponents();
     }
 
-    ///ver popula combo box
-    public Funcionario getFuncionariobyFormulario() {
-        ///validação do form.
-        if (txfCPF.getText().trim().length() > 10 && new String(txfSenha.getPassword()).trim().length() > 3) {
-            Funcionario f = new Funcionario();
-            f.setCpf(txfCPF.getText().trim());
-            f.setSenha(new String(txfSenha.getPassword()).trim());
-            f.setNumero_ctps(txfCTPS.getText().trim());
-            f.setNumero_pis(txfPIS.getText().trim());
-            f.setCargo(Cargo.getCargo(cbxcargo.getSelectedItem().toString()));
-            return f;
+    public void populaComboCargo() {
+        cbxCargo.removeAllItems();
+        DefaultComboBoxModel model = (DefaultComboBoxModel) cbxCargo.getModel();
+        model.addElement("Selecione");
+        try {
+            List<Cargo> listCargos = Arrays.asList(Cargo.values());
+            listCargos.forEach(c -> {
+                model.addElement(c);
+            });
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erro ao listar os Cargos:" + e.getLocalizedMessage(), "Cargos", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+
+    public Funcionario getFuncionarioByFormulario() throws ParseException {
+        if (txfNome.getText().trim().length() > 4) {
+            if (new String(txfSenha.getPassword()).trim().length() > 4) {
+                if (txfCpf.getText().trim().length() == 11) {
+                    if (txfDataNascimento.getText().trim().length() == 10) {
+                        if (txfEmail.getText().trim().length() > 5) {
+                            if (txfEndereco.getText().trim().length() > 8) {
+                                if (txfNumeroCelular.getText().trim().length() >= 10) {
+                                    if (cbxCargo.getSelectedIndex() != 0) {    
+                                        if (txfCtps.getText().trim().length() == 12) {
+                                            if (txfPis.getText().trim().length() > 10) {
+                                                Funcionario f = new Funcionario();
+                                                f.setNome(txfNome.getText().trim());
+                                                f.setSenha(new String(txfSenha.getPassword()).trim());
+                                                f.setEmail(txfEmail.getText().trim());
+                                                f.setEndereco(txfEndereco.getText().trim());
+                                                f.setNumero_celular(txfNumeroCelular.getText().trim());
+                                                f.setCargo((Cargo) cbxCargo.getSelectedItem());
+                                                f.setNumero_ctps(txfCtps.getText().trim());
+                                                f.setNumero_pis(txfPis.getText().trim());
+                                                f.setCep(txfCep.getText().trim());
+                                                f.setComplemento(txfComplemento.getText().trim());
+                                                f.setRg(txfRg.getText().trim());
+                                                f.setCpf(txfCpf.getText().trim());
+                                                if (txfDataNascimento.getText().trim().length() > 1) {
+                                                    Calendar dtNascimento = Calendar.getInstance();
+                                                    dtNascimento.setTime(sdfformat.parse(txfDataNascimento.getText()));
+                                                    f.setData_nascimento(dtNascimento);
+                                                }
+                                                if (funcionario != null) {
+                                                    f.setData_cadastro(funcionario.getData_cadastro());
+                                                }
+                                                return f;
+                                            } else {
+                                                JOptionPane.showMessageDialog(this, " PIS é um campo obrigatório", "Funcionario", JOptionPane.ERROR_MESSAGE);
+                                            }
+                                        } else {
+                                            JOptionPane.showMessageDialog(this, " CTPS inválido! ", "Funcionario", JOptionPane.ERROR_MESSAGE);
+                                        }
+                                    } else {
+                                        JOptionPane.showMessageDialog(this, " selecione algum Cargo!", "Funcionario", JOptionPane.ERROR_MESSAGE);
+                                    }
+                                } else {
+                                    JOptionPane.showMessageDialog(this, "Celular inválido!", "Funcionario", JOptionPane.ERROR_MESSAGE);
+                                }
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Endereço é obrigatório!", "Funcionario", JOptionPane.ERROR_MESSAGE);
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(this, "E-mail é obrigatório! ", "Funcionario", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Data de Nascimento inválida! ", "Funcionario", JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "CPF inválido! ", "Funcionario", JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Senha é obrigatório!.", "Funcionario", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Nome é obrigatório! .", "Funcionario", JOptionPane.ERROR_MESSAGE);
         }
         return null;
     }
 
     public void setFuncionarioFormulario(Funcionario f) {
-        if (f == null) {///se o parâmetro estiver nulo, limpa o form
-            txfCPF.setText("");
-            ///txfSenha.setText("");
-            txfCTPS.setText("");
-            txfPIS.setText("");
-            cbxcargo.setSelectedIndex(0);
-            funcionario = null;
+        if (f == null) {
+            txfNome.setText("");
+            txfSenha.setText("");
+            txfCpf.setText("");
+            txfCep.setText("");
+            txfComplemento.setText("");
+            txfDataNascimento.setText("");
+            txfEmail.setText("");
+            txfEndereco.setText("");
+            txfNumeroCelular.setText("");
+            txfRg.setText("");
+            cbxCargo.setSelectedIndex(0);
+            txfCtps.setText("");
+            txfPis.setText("");
+            txfDataCadastro.setText(sdfformat.format(Calendar.getInstance().getTime()));
         } else {
             funcionario = f;
-            txfCPF.setEditable(false);///para não editar o cpf
-            txfCPF.setText(funcionario.getCpf());
-            ///txfSenha.setText(funcionario.getSenha());
-            txfCTPS.setText(funcionario.getNumero_ctps());
-            txfPIS.setText(funcionario.getNumero_pis());
-            cbxcargo.getModel().setSelectedItem(funcionario.getCargo());
-        }
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent arg0) {
-        ///throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            if(arg0.getActionCommand().equals(btnGravar.getActionCommand())){          
-            Funcionario f = getFuncionariobyFormulario();//recupera os dados do formulÃ¡rio       
-            if(f != null){
-                try {                  
-                    pnlAFuncionario.getControle().getConexaoJDBC().persist(f);
-                    JOptionPane.showMessageDialog(this, "Funcionario armazenado!", "Salvar", JOptionPane.INFORMATION_MESSAGE);                
-                    pnlAFuncionario.showTela("tela_funcionario_listagem");
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(this, "Erro ao salvar Funcionario! : "+ex.getMessage(), "Salvar", JOptionPane.ERROR_MESSAGE);
-                    ex.printStackTrace();
-                }
-            }else{
-                JOptionPane.showMessageDialog(this, "Preencha o formulário!", "Edição", JOptionPane.INFORMATION_MESSAGE);
-            }          
-        }else if(arg0.getActionCommand().equals(btnCancelar.getActionCommand())){
-                pnlAFuncionario.showTela("tela_funcionario_listagem");   
+            txfNome.setEditable(false);
+            txfNome.setText(funcionario.getNome());
+            txfSenha.setText(funcionario.getSenha());
+            txfCpf.setText(funcionario.getCpf());
+            txfCpf.setEditable(false);
+            txfEmail.setText(funcionario.getEmail());
+            txfEndereco.setText(funcionario.getEndereco());
+            txfNumeroCelular.setText(funcionario.getNumero_celular());
+            cbxCargo.getModel().setSelectedItem(funcionario.getCargo());
+            txfCtps.setText(funcionario.getNumero_ctps());
+            txfPis.setText(funcionario.getNumero_pis());
+            txfDataCadastro.setEditable(false);
+            if (f.getData_nascimento() != null) {
+                txfDataNascimento.setText(sdfformat.format(funcionario.getData_nascimento().getTime()));
+            }
+            if (f.getData_cadastro() != null) {
+                txfDataCadastro.setText(sdfformat.format(funcionario.getData_cadastro().getTime()));
+            }
+            if (f.getCep() != null) {
+                txfCep.setText(funcionario.getCep());
+            }
+            if (f.getComplemento() != null) {
+                txfComplemento.setText(funcionario.getComplemento());
+            }
+            if (f.getRg() != null) {
+                txfRg.setText(funcionario.getRg());
+            }
         }
     }
 
     private void initComponents() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         borderLayout = new BorderLayout();
         this.setLayout(borderLayout);
+
         tbpAbas = new JTabbedPane();
-        this.add(tbpAbas, BorderLayout.CENTER);
+        this.add(tbpAbas, borderLayout.CENTER);
+
         pnlDadosCadastrais = new JPanel();
         gridBagLayoutDadosCadastrais = new GridBagLayout();
         pnlDadosCadastrais.setLayout(gridBagLayoutDadosCadastrais);
 
-        lblCPF = new JLabel("CPF: ");
+        lblNome = new JLabel("Nome:");
         GridBagConstraints posicionador = new GridBagConstraints();
-        posicionador.gridy = 0;//policao da linha (vertical)
-        posicionador.gridx = 0;// posição da coluna (horizontal)
-        pnlDadosCadastrais.add(lblCPF, posicionador);//o add adiciona o rotulo no painel  
+        posicionador.gridy = 0;
+        posicionador.gridx = 0;
+        pnlDadosCadastrais.add(lblNome, posicionador);
 
-        txfCPF = new JTextField(12);
+        txfNome = new JTextField(20);
         posicionador = new GridBagConstraints();
-        posicionador.gridy = 0;//policao da linha (vertical)
-        posicionador.gridx = 1;// posição da coluna (horizontal)
-        posicionador.anchor = java.awt.GridBagConstraints.LINE_START;//ancoragem a esquerda.
-        pnlDadosCadastrais.add(txfCPF, posicionador);//o add adiciona o rotulo no painel  
+        posicionador.gridy = 0;
+        posicionador.gridx = 1;
+        posicionador.anchor = GridBagConstraints.LINE_START;
+        pnlDadosCadastrais.add(txfNome, posicionador);
 
-        ///lblSenha = new JLabel("Senha:");
-        ///posicionador = new GridBagConstraints();
-        ///posicionador.gridy = 1;//policao da linha (vertical)
-        ///posicionador.gridx = 0;// posição da coluna (horizontal)
-        ///pnlDadosCadastrais.add(lblSenha, posicionador);//o add adiciona o rotulo no painel  
-
-        ///txfSenha = new JPasswordField(12);
-        ///posicionador = new GridBagConstraints();
-        ///posicionador.gridy = 1;//policao da linha (vertical)
-        ///posicionador.gridx = 1;// posição da coluna (horizontal)
-        ///posicionador.anchor = java.awt.GridBagConstraints.LINE_START;//ancoragem a esquerda.
-        ///pnlDadosCadastrais.add(txfSenha, posicionador);//o add adiciona o rotulo no painel  
-
-        lblCTPS = new JLabel("Número CTPS: ");
+        lblSenha = new JLabel("Senha:");
         posicionador = new GridBagConstraints();
-        posicionador.gridy = 2;//policao da linha (vertical)
-        posicionador.gridx = 0;// posição da coluna (horizontal)
-        pnlDadosCadastrais.add(lblCTPS, posicionador);//o add adiciona o rotulo no painel  
+        posicionador.gridy = 1;
+        posicionador.gridx = 0;
+        pnlDadosCadastrais.add(lblSenha, posicionador);
 
-        txfCTPS = new JTextField(12);
+        txfSenha = new JPasswordField(10);
         posicionador = new GridBagConstraints();
-        posicionador.gridy = 2;//policao da linha (vertical)
-        posicionador.gridx = 1;// posição da coluna (horizontal)
-        posicionador.anchor = java.awt.GridBagConstraints.LINE_START;//ancoragem a esquerda.
-        pnlDadosCadastrais.add(txfCTPS, posicionador);//o add adiciona o rotulo no painel  
+        posicionador.gridy = 1;
+        posicionador.gridx = 1;
+        posicionador.anchor = GridBagConstraints.LINE_START;
+        pnlDadosCadastrais.add(txfSenha, posicionador);
 
-        lblPIS = new JLabel("Número PIS:");
+        lblCpf = new JLabel("CPF:");
         posicionador = new GridBagConstraints();
-        posicionador.gridy = 3;//policao da linha (vertical)
-        posicionador.gridx = 0;// posição da coluna (horizontal)
-        posicionador.anchor = java.awt.GridBagConstraints.LINE_START;//ancoragem a esquerda.
-        pnlDadosCadastrais.add(lblPIS, posicionador);//o add adiciona o rotulo no painel  
+        posicionador.gridy = 2;
+        posicionador.gridx = 0;
+        pnlDadosCadastrais.add(lblCpf, posicionador);
 
-        txfPIS = new JTextField(12);
+        txfCpf = new JTextField(14);
         posicionador = new GridBagConstraints();
-        posicionador.gridy = 3;//policao da linha (vertical)
-        posicionador.gridx = 1;// posição da coluna (horizontal)
-        pnlDadosCadastrais.add(txfPIS, posicionador);
+        posicionador.gridy = 2;
+        posicionador.gridx = 1;
+        posicionador.anchor = GridBagConstraints.LINE_START;
+        pnlDadosCadastrais.add(txfCpf, posicionador);
 
-        lblcargo = new JTextField(12);
+        lblCep = new JLabel("CEP:");
         posicionador = new GridBagConstraints();
-        posicionador.gridy = 4;//policao da linha (vertical)
-        posicionador.gridx = 0;// posição da coluna (horizontal)
-        posicionador.anchor = java.awt.GridBagConstraints.LINE_START;//ancoragem a esquerda.
-        pnlDadosCadastrais.add(lblcargo, posicionador);//o add adiciona o rotulo no painel     
+        posicionador.gridy = 3;
+        posicionador.gridx = 0;
+        pnlDadosCadastrais.add(lblCep, posicionador);
+
+        txfCep = new JTextField(9);
+        posicionador = new GridBagConstraints();
+        posicionador.gridy = 3;
+        posicionador.gridx = 1;
+        posicionador.anchor = GridBagConstraints.LINE_START;
+        pnlDadosCadastrais.add(txfCep, posicionador);
+
+        lblComplemento = new JLabel("Complemento:");
+        posicionador = new GridBagConstraints();
+        posicionador.gridy = 4;
+        posicionador.gridx = 0;
+        pnlDadosCadastrais.add(lblComplemento, posicionador);
+
+        txfComplemento = new JTextField(20);
+        posicionador = new GridBagConstraints();
+        posicionador.gridy = 4;
+        posicionador.gridx = 1;
+        posicionador.anchor = GridBagConstraints.LINE_START;
+        pnlDadosCadastrais.add(txfComplemento, posicionador);
+
+        lblDataNascimento = new JLabel("Data de Nascimento:");
+        posicionador = new GridBagConstraints();
+        posicionador.gridy = 5;
+        posicionador.gridx = 0;
+        pnlDadosCadastrais.add(lblDataNascimento, posicionador);
+
+        txfDataNascimento = new JTextField(10);
+        posicionador = new GridBagConstraints();
+        posicionador.gridy = 5;
+        posicionador.gridx = 1;
+        posicionador.anchor = GridBagConstraints.LINE_START;
+        pnlDadosCadastrais.add(txfDataNascimento, posicionador);
+
+        lblDataCadastro = new JLabel("Data de Cadastro:");
+        posicionador = new GridBagConstraints();
+        posicionador.gridy = 6;
+        posicionador.gridx = 0;
+        pnlDadosCadastrais.add(lblDataCadastro, posicionador);
+
+        txfDataCadastro = new JTextField(10);
+        txfDataCadastro.setEditable(false);
+        posicionador = new GridBagConstraints();
+        posicionador.gridy = 6;
+        posicionador.gridx = 1;
+        posicionador.anchor = GridBagConstraints.LINE_START;
+        pnlDadosCadastrais.add(txfDataCadastro, posicionador);
+
+        lblEmail = new JLabel("E-mail:");
+        posicionador = new GridBagConstraints();
+        posicionador.gridy = 7;
+        posicionador.gridx = 0;
+        pnlDadosCadastrais.add(lblEmail, posicionador);
+
+        txfEmail = new JTextField(40);
+        posicionador = new GridBagConstraints();
+        posicionador.gridy = 7;
+        posicionador.gridx = 1;
+        posicionador.anchor = GridBagConstraints.LINE_START;
+        pnlDadosCadastrais.add(txfEmail, posicionador);
+
+        lblEndereco = new JLabel("Endereço:");
+        posicionador = new GridBagConstraints();
+        posicionador.gridy = 8;
+        posicionador.gridx = 0;
+        pnlDadosCadastrais.add(lblEndereco, posicionador);
+
+        txfEndereco = new JTextField(40);
+        posicionador = new GridBagConstraints();
+        posicionador.gridy = 8;
+        posicionador.gridx = 1;
+        posicionador.anchor = GridBagConstraints.LINE_START;
+        pnlDadosCadastrais.add(txfEndereco, posicionador);
+
+        lblNumeroCelular = new JLabel("Número de Celular:");
+        posicionador = new GridBagConstraints();
+        posicionador.gridy = 9;
+        posicionador.gridx = 0;
+        pnlDadosCadastrais.add(lblNumeroCelular, posicionador);
+
+        txfNumeroCelular = new JTextField(40);
+        posicionador = new GridBagConstraints();
+        posicionador.gridy = 9;
+        posicionador.gridx = 1;
+        posicionador.anchor = GridBagConstraints.LINE_START;
+        pnlDadosCadastrais.add(txfNumeroCelular, posicionador);
+
+        lblRg = new JLabel("RG:");
+        posicionador = new GridBagConstraints();
+        posicionador.gridy = 10;
+        posicionador.gridx = 0;
+        pnlDadosCadastrais.add(lblRg, posicionador);
+
+        txfRg = new JTextField(12);
+        posicionador = new GridBagConstraints();
+        posicionador.gridy = 10;
+        posicionador.gridx = 1;
+        posicionador.anchor = GridBagConstraints.LINE_START;
+        pnlDadosCadastrais.add(txfRg, posicionador);
+
+        lblCargo = new JLabel("Cargo:");
+        posicionador = new GridBagConstraints();
+        posicionador.gridy = 11;
+        posicionador.gridx = 0;
+        pnlDadosCadastrais.add(lblCargo, posicionador);
+
+        cbxCargo = new JComboBox();
+        posicionador = new GridBagConstraints();
+        posicionador.gridy = 11;
+        posicionador.gridx = 1;
+        posicionador.anchor = GridBagConstraints.LINE_START;
+        pnlDadosCadastrais.add(cbxCargo, posicionador);
+
+        lblCtps = new JLabel("Número CTPS:");
+        posicionador = new GridBagConstraints();
+        posicionador.gridy = 12;
+        posicionador.gridx = 0;
+        pnlDadosCadastrais.add(lblCtps, posicionador);
+
+        txfCtps = new JTextField(18);
+        posicionador = new GridBagConstraints();
+        posicionador.gridy = 12;
+        posicionador.gridx = 1;
+        posicionador.anchor = GridBagConstraints.LINE_START;
+        pnlDadosCadastrais.add(txfCtps, posicionador);
+
+        lblPis = new JLabel("Número PIS:");
+        posicionador = new GridBagConstraints();
+        posicionador.gridy = 13;
+        posicionador.gridx = 0;
+        pnlDadosCadastrais.add(lblPis, posicionador);
+
+        txfPis = new JTextField(40);
+        posicionador = new GridBagConstraints();
+        posicionador.gridy = 13;
+        posicionador.gridx = 1;
+        posicionador.anchor = GridBagConstraints.LINE_START;
+        pnlDadosCadastrais.add(txfPis, posicionador);
+
         tbpAbas.addTab("Dados Cadastrais", pnlDadosCadastrais);
 
-        cbxcargo = new JComboBox();
-        posicionador = new GridBagConstraints();
-        posicionador.gridy = 4;//policao da linha (vertical)
-        posicionador.gridx = 1;// posição da coluna (horizontal)
-        pnlDadosCadastrais.add(cbxcargo, posicionador);
-
-        ///pnlDadosCompras = new JPanel();
-        ///tbpAbas.addTab("Compras", pnlDadosCompras);
         pnlSul = new JPanel();
         pnlSul.setLayout(new FlowLayout());
-        btnGravar = new JButton("Gravar");
-        btnGravar.addActionListener(this);
-        btnGravar.setFocusable(true);///acessibilidade    
-        btnGravar.setToolTipText("btnGravarFuncionario");///acessibilidade
-        btnGravar.setMnemonic(KeyEvent.VK_G);
-        btnGravar.setActionCommand("botao_gravar_formulario_funcionario");
-        pnlSul.add(btnGravar);
+
+        btnSalvar = new JButton("Gravar");
+        btnSalvar.addActionListener(this);
+        btnSalvar.setFocusable(true);
+        btnSalvar.setToolTipText("btnGravarFuncionario");
+        btnSalvar.setMnemonic(KeyEvent.VK_G);
+        btnSalvar.setActionCommand("botao_gravar_formulario_fucionario");
+
+        pnlSul.add(btnSalvar);
+
         btnCancelar = new JButton("Cancelar");
         btnCancelar.addActionListener(this);
-        btnCancelar.setFocusable(true);///acessibilidade    
-        btnCancelar.setToolTipText("btnCancelarFuncionario");///acessibilidade
-        btnCancelar.setActionCommand("botao_cancelar_formulario_funcionario");
+        btnCancelar.setFocusable(true);
+        btnCancelar.setToolTipText("btnCancelarFuncionario");
+        btnCancelar.setActionCommand("botao_cancelar_formulario");
         pnlSul.add(btnCancelar);
+
         this.add(pnlSul, BorderLayout.SOUTH);
-        format = new SimpleDateFormat("dd/MM/yyyy");
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent arg0) {
+        if (arg0.getActionCommand().equals(btnSalvar.getActionCommand())) {
+            Funcionario f;
+            try {
+                f = getFuncionarioByFormulario();
+
+                if (f != null) {
+                    try {
+                        pnlAFuncionario.getControle().getConexaoJDBC().persist(f);
+                        JOptionPane.showMessageDialog(this, "Funcionario salvo com sucesso!", "Salvar", JOptionPane.INFORMATION_MESSAGE);
+                        pnlAFuncionario.showTela("tela_funcionario_listagem");
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, "Erro ao salvar o Funcionário! : " + e.getMessage(), "Salvar", JOptionPane.ERROR_MESSAGE);
+                        e.printStackTrace();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Preencha o formulário!", "Edição", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erro ao salvar o Funcionário! : " + e.getMessage(), "Salvar", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+        } else if (arg0.getActionCommand().equals(btnCancelar.getActionCommand())) {
+            setFuncionarioFormulario(null);
+            pnlAFuncionario.showTela("tela_funcionario_listagem");
+        }
     }
 }

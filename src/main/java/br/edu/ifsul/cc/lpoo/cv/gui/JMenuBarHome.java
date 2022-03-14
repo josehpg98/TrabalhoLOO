@@ -34,9 +34,7 @@ public class JMenuBarHome extends JMenuBar implements ActionListener {
     private Controle controle;
 
     public JMenuBarHome(Controle controle) {
-
         this.controle = controle;
-
         initComponents();
     }
 
@@ -101,25 +99,20 @@ public class JMenuBarHome extends JMenuBar implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         if (e.getActionCommand().equals(menuItemSair.getActionCommand())) {
-
             //se o usuario clicou no menuitem Sair
             int d = JOptionPane.showConfirmDialog(this, "Deseja realmente sair do sistema? ", "Sair", JOptionPane.YES_NO_OPTION);
             if (d == 0) {
                 controle.fecharBD();//fecha a conexao com o banco de dados.
                 System.exit(0);//finaliza o processo do programa.
             }
-
         } else if (e.getActionCommand().equals(menuItemFuncionario.getActionCommand())) {
             //se o usuario clicou no menuitem Usuario            
             controle.showTela("tela_funcionario_a");
-
         } else if (e.getActionCommand().equals(menuItemLogout.getActionCommand())) {
             controle.showTela("tela_autenticacao");
-        }else if(e.getActionCommand().equals(menuItemVenda.getActionCommand())){
-            controle.showTela("tela_venda");
+        } else if (e.getActionCommand().equals(menuItemVenda.getActionCommand())) {
+            controle.showTela("tela_venda_a");
         }
-
     }
 }
